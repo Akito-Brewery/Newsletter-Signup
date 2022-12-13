@@ -4,6 +4,12 @@ const bodyParser = require("body-parser");
 const https = require("https");
 const client = require("@mailchimp/mailchimp_marketing");
 
+require("dotenv").config();
+const audienceId = process.env.N1_KEY;
+const apiString = process.env.N1_SECRET;
+const server = process.env.N1_SERVER;
+const apiAuth = "myname:" + apiString;
+
 const app = express();
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({
@@ -20,6 +26,12 @@ client.setConfig({
 });
 
 app.post("/", function(req, res) {
+  const url =
+    "https://" + server + ".api.mailchimp.com/3.0/lists/" + audienceId;
+  const options = {
+    method: "POST",
+    auth: apiAuth,
+  };
   const firstName = req.body.fName;
   const lastName = req.body.lName;
   const email = req.body.email;
